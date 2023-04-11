@@ -34,7 +34,7 @@ public class StationAcceptanceTest {
 
         // Then
         List<String> stationNames = getStations();
-        assertThat(stationNames).containsAnyOf("강남역");
+        assertThat(stationNames).containsExactly("강남역");
     }
 
     /**
