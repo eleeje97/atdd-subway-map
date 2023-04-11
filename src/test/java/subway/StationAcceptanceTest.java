@@ -46,8 +46,8 @@ public class StationAcceptanceTest {
     @Test
     void getStationsTest() {
         // Given
-        ExtractableResponse<Response> response1 = createStation("강남역");
-        ExtractableResponse<Response> response2 = createStation("서울역");
+        createStation("강남역");
+        createStation("서울역");
 
         // When
         List<String> stationNames = getStations();
