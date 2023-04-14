@@ -18,6 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("지하철역 관련 기능")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class StationAcceptanceTest {
+    private static final String basePath = "/stations";
+
     /**
      * When 지하철역을 생성하면
      * Then 지하철역이 생성된다
@@ -84,23 +86,27 @@ public class StationAcceptanceTest {
         params.put("name", stationName);
 
         return RestAssured.given().log().all()
+                .basePath(basePath)
                 .body(params)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .when().post("/stations")
+                .when().post()
                 .then().log().all()
                 .extract();
     }
 
     List<String> getStations() {
         return RestAssured.given().log().all()
-                .when().get("/stations")
+                .basePath(basePath)
+                .when().get()
                 .then().log().all()
                 .extract().jsonPath().getList("name", String.class);
     }
 
     ExtractableResponse<Response> deleteStation(int stationId) {
         return RestAssured.given().log().all()
-                .when().delete("/stations/" + stationId)
+                .basePath(basePath)
+                .pathParam("stationId", stationId)
+                .when().delete("/{stationId}")
                 .then().log().all()
                 .extract();
     }
