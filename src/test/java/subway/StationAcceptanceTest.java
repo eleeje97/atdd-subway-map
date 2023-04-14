@@ -28,15 +28,18 @@ public class StationAcceptanceTest {
     @DisplayName("지하철역을 생성한다.")
     @Test
     void createStationTest() {
+        // Given
+        String stationName = "강남역";
+
         // When
-        ExtractableResponse<Response> response = createStation("강남역");
+        ExtractableResponse<Response> response = createStation(stationName);
 
         // Then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
 
         // Then
         List<String> stationNames = getStations();
-        assertThat(stationNames).contains("강남역");
+        assertThat(stationNames).contains(stationName);
     }
 
     /**
@@ -67,7 +70,8 @@ public class StationAcceptanceTest {
     @Test
     void deleteStationTest() {
         // Given
-        int stationId = createStation("강남역")
+        String stationName = "강남역";
+        int stationId = createStation(stationName)
                 .body()
                 .jsonPath()
                 .get("id");
@@ -78,7 +82,7 @@ public class StationAcceptanceTest {
         // Then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
         List<String> stationNames = getStations();
-        assertThat(stationNames).doesNotContain("강남역");
+        assertThat(stationNames).doesNotContain(stationName);
     }
 
     ExtractableResponse<Response> createStation(String stationName) {
