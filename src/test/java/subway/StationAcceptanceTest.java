@@ -19,13 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class StationAcceptanceTest {
     private static final String basePath = "/stations";
+    private static final String GANGNAM_STATION = "강남역";
+    private static final String SEOUL_STATION = "서울역";
 
     @DisplayName("지하철역을 생성한다.")
     @Test
     void createStationTest() {
-        // Given
-        String GANGNAM_STATION = "강남역";
-
         // When
         지하철역_생성(GANGNAM_STATION);
 
@@ -38,8 +37,6 @@ public class StationAcceptanceTest {
     @Test
     void getStationsTest() {
         // Given
-        String GANGNAM_STATION = "강남역";
-        String SEOUL_STATION = "서울역";
         지하철역_생성(GANGNAM_STATION);
         지하철역_생성(SEOUL_STATION);
 
@@ -54,7 +51,6 @@ public class StationAcceptanceTest {
     @Test
     void deleteStationTest() {
         // Given
-        String GANGNAM_STATION = "강남역";
         int stationId = 지하철역_생성(GANGNAM_STATION)
                 .body()
                 .jsonPath()
