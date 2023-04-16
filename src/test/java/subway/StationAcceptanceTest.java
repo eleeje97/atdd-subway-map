@@ -24,17 +24,17 @@ public class StationAcceptanceTest {
     @Test
     void createStationTest() {
         // Given
-        String stationName = "강남역";
+        String GANGNAM_STATION = "강남역";
 
         // When
-        ExtractableResponse<Response> response = 지하철역_생성(stationName);
+        ExtractableResponse<Response> response = 지하철역_생성(GANGNAM_STATION);
 
         // Then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
 
         // Then
         List<String> stationNames = 지하철역_조회();
-        assertThat(stationNames).contains(stationName);
+        assertThat(stationNames).contains(GANGNAM_STATION);
     }
 
     @DisplayName("지하철역 목록을 조회한다.")
@@ -55,8 +55,8 @@ public class StationAcceptanceTest {
     @Test
     void deleteStationTest() {
         // Given
-        String stationName = "강남역";
-        int stationId = 지하철역_생성(stationName)
+        String GANGNAM_STATION = "강남역";
+        int stationId = 지하철역_생성(GANGNAM_STATION)
                 .body()
                 .jsonPath()
                 .get("id");
@@ -67,7 +67,7 @@ public class StationAcceptanceTest {
         // Then
         assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
         List<String> stationNames = 지하철역_조회();
-        assertThat(stationNames).doesNotContain(stationName);
+        assertThat(stationNames).doesNotContain(GANGNAM_STATION);
     }
 
     private ExtractableResponse<Response> 지하철역_생성(String stationName) {
