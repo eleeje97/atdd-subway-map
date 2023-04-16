@@ -38,8 +38,10 @@ public class StationAcceptanceTest {
     @Test
     void getStationsTest() {
         // Given
-        지하철역_생성("강남역");
-        지하철역_생성("서울역");
+        String GANGNAM_STATION = "강남역";
+        String SEOUL_STATION = "서울역";
+        지하철역_생성(GANGNAM_STATION);
+        지하철역_생성(SEOUL_STATION);
 
         // When
         List<String> stationNames = 지하철역_조회();
