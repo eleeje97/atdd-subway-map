@@ -27,10 +27,7 @@ public class StationAcceptanceTest {
         String GANGNAM_STATION = "강남역";
 
         // When
-        ExtractableResponse<Response> response = 지하철역_생성(GANGNAM_STATION);
-
-        // Then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+        지하철역_생성(GANGNAM_STATION);
 
         // Then
         List<String> stationNames = 지하철역_조회();
@@ -80,6 +77,7 @@ public class StationAcceptanceTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post()
                 .then().log().all()
+                .assertThat().statusCode(HttpStatus.CREATED.value())
                 .extract();
     }
 
