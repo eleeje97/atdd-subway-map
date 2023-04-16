@@ -59,10 +59,9 @@ public class StationAcceptanceTest {
                 .get("id");
 
         // When
-        ExtractableResponse<Response> response = 지하철역_삭제(stationId);
+        지하철역_삭제(stationId);
 
         // Then
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.NO_CONTENT.value());
         List<String> stationNames = 지하철역_조회();
         assertThat(stationNames).doesNotContain(GANGNAM_STATION);
     }
@@ -95,6 +94,7 @@ public class StationAcceptanceTest {
                 .pathParam("stationId", stationId)
                 .when().delete("/{stationId}")
                 .then().log().all()
+                .assertThat().statusCode(HttpStatus.NO_CONTENT.value())
                 .extract();
     }
 }
