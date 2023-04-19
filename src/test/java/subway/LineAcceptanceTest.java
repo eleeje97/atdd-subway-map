@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class LineAcceptanceTest {
     private static final String SILLIM_LINE = "신림선";
+    private static final String EVER_LINE = "에버라인";
 
     @DisplayName("지하철 노선을 생성한다.")
     @Test
@@ -30,13 +31,34 @@ public class LineAcceptanceTest {
                 .basePath("lines")
                 .when().get()
                 .then().log().all()
-                .assertThat().statusCode(HttpStatus.CREATED.value())
+                .assertThat().statusCode(HttpStatus.OK.value())
                 .extract();
 
         List<String> lineNames = response.jsonPath().getList("name", String.class);
         assertThat(lineNames).contains(SILLIM_LINE);
     }
 
+    @DisplayName("지하철 노선 목록을 조회한다.")
+    @Test
+    void getLineList() {
+        // Given
+        지하철노선_생성(SILLIM_LINE, "bg-navy-600", 1, 2, 10);
+        지하철노선_생성(EVER_LINE, "bg-yellow-600", 1, 3, 15);
+
+        // When
+        ExtractableResponse<Response> response = RestAssured.given().log().all()
+                .basePath("lines")
+                .when().get()
+                .then().log().all()
+                .assertThat().statusCode(HttpStatus.OK.value())
+                .extract();
+        List<String> lineNames = response.jsonPath().getList("name", String.class);
+
+        // Then
+        assertThat(lineNames).hasSize(2);
+        assertThat(lineNames).contains(SILLIM_LINE, EVER_LINE);
+
+    }
 
     private void 지하철노선_생성(String name, String color, int upStationId, int downStationId, int distance) {
         Map<String, Object> params = new HashMap<>();
