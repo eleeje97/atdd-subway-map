@@ -1,8 +1,6 @@
 package subway;
 
 import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,14 +25,7 @@ public class LineAcceptanceTest {
         지하철노선_생성(SILLIM_LINE, "bg-navy-600", 1, 2, 10);
 
         // Then
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .basePath("lines")
-                .when().get()
-                .then().log().all()
-                .assertThat().statusCode(HttpStatus.OK.value())
-                .extract();
-
-        List<String> lineNames = response.jsonPath().getList("name", String.class);
+        List<String> lineNames = 지하철노선_목록_조회();
         assertThat(lineNames).contains(SILLIM_LINE);
     }
 
@@ -46,13 +37,7 @@ public class LineAcceptanceTest {
         지하철노선_생성(EVER_LINE, "bg-yellow-600", 1, 3, 15);
 
         // When
-        ExtractableResponse<Response> response = RestAssured.given().log().all()
-                .basePath("lines")
-                .when().get()
-                .then().log().all()
-                .assertThat().statusCode(HttpStatus.OK.value())
-                .extract();
-        List<String> lineNames = response.jsonPath().getList("name", String.class);
+        List<String> lineNames = 지하철노선_목록_조회();
 
         // Then
         assertThat(lineNames).hasSize(2);
@@ -75,5 +60,14 @@ public class LineAcceptanceTest {
                 .then().log().all()
                 .assertThat().statusCode(HttpStatus.CREATED.value())
                 .extract();
+    }
+
+    private List<String> 지하철노선_목록_조회() {
+        return RestAssured.given().log().all()
+                .basePath("lines")
+                .when().get()
+                .then().log().all()
+                .assertThat().statusCode(HttpStatus.OK.value())
+                .extract().jsonPath().getList("name", String.class);
     }
 }
