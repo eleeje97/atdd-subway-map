@@ -62,6 +62,21 @@ public class LineAcceptanceTest {
         assertThat(response.jsonPath().getList("stations")).hasSize(2);
     }
 
+    @DisplayName("지하철 노선을 수정한다.")
+    @Test
+    void updateLineTest() {
+        // Given
+        지하철노선_생성(SILLIM_LINE, "bg-navy-600", 1, 2, 10);
+
+        // When
+        지하철노선_수정(1,  EVER_LINE, "bg-navy-600");
+
+        // Then
+        ExtractableResponse<Response> response = 지하철노선_조회(1);
+        assertThat(response.jsonPath().getString("name")).isEqualTo(EVER_LINE);
+    }
+
+
     private void 지하철노선_생성(String name, String color, int upStationId, int downStationId, int distance) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
@@ -93,6 +108,21 @@ public class LineAcceptanceTest {
                 .basePath("lines")
                 .pathParam("lineId", lineId)
                 .when().get("/{lineId}")
+                .then().log().all()
+                .assertThat().statusCode(HttpStatus.OK.value())
+                .extract();
+    }
+
+    private void 지하철노선_수정(int lindId, String name, String color) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        params.put("color", color);
+
+        RestAssured.given().log().all()
+                .basePath("lines")
+                .body(params)
+                .pathParam("lineId", lindId)
+                .when().put("/{lindId}")
                 .then().log().all()
                 .assertThat().statusCode(HttpStatus.OK.value())
                 .extract();
