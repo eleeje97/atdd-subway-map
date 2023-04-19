@@ -1,6 +1,8 @@
 package subway;
 
 import io.restassured.RestAssured;
+import io.restassured.response.ExtractableResponse;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +33,7 @@ public class LineAcceptanceTest {
 
     @DisplayName("지하철 노선 목록을 조회한다.")
     @Test
-    void getLineList() {
+    void getLineListTest() {
         // Given
         지하철노선_생성(SILLIM_LINE, "bg-navy-600", 1, 2, 10);
         지하철노선_생성(EVER_LINE, "bg-yellow-600", 1, 3, 15);
@@ -42,7 +44,22 @@ public class LineAcceptanceTest {
         // Then
         assertThat(lineNames).hasSize(2);
         assertThat(lineNames).contains(SILLIM_LINE, EVER_LINE);
+    }
 
+    @DisplayName("지하철 노선을 조회한다.")
+    @Test
+    void getLineTest() {
+        // Given
+        지하철노선_생성(SILLIM_LINE, "bg-navy-600", 1, 2, 10);
+
+        // When
+        ExtractableResponse<Response> response = 지하철노선_조회(1);
+
+        // Then
+        assertThat(response.jsonPath().getInt("id")).isEqualTo(1);
+        assertThat(response.jsonPath().getString("name")).isEqualTo(SILLIM_LINE);
+        assertThat(response.jsonPath().getString("color")).isEqualTo("bg-navy-600");
+        assertThat(response.jsonPath().getList("stations")).hasSize(2);
     }
 
     private void 지하철노선_생성(String name, String color, int upStationId, int downStationId, int distance) {
@@ -69,5 +86,15 @@ public class LineAcceptanceTest {
                 .then().log().all()
                 .assertThat().statusCode(HttpStatus.OK.value())
                 .extract().jsonPath().getList("name", String.class);
+    }
+
+    private ExtractableResponse<Response> 지하철노선_조회(int lineId) {
+        return RestAssured.given().log().all()
+                .basePath("lines")
+                .pathParam("lineId", lineId)
+                .when().get("/{lineId}")
+                .then().log().all()
+                .assertThat().statusCode(HttpStatus.OK.value())
+                .extract();
     }
 }
