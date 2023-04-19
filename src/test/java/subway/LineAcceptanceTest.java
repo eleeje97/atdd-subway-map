@@ -76,6 +76,20 @@ public class LineAcceptanceTest {
         assertThat(response.jsonPath().getString("name")).isEqualTo(EVER_LINE);
     }
 
+    @DisplayName("지하철 노선을 삭제한다.")
+    @Test
+    void deleteLineTest() {
+        // Given
+        지하철노선_생성(SILLIM_LINE, "bg-navy-600", 1, 2, 10);
+
+        // When
+        지하철노선_삭제(1);
+
+        // Then
+        List<String> lineNames = 지하철노선_목록_조회();
+        assertThat(lineNames).doesNotContain(SILLIM_LINE);
+    }
+
 
     private void 지하철노선_생성(String name, String color, int upStationId, int downStationId, int distance) {
         Map<String, Object> params = new HashMap<>();
@@ -113,7 +127,7 @@ public class LineAcceptanceTest {
                 .extract();
     }
 
-    private void 지하철노선_수정(int lindId, String name, String color) {
+    private void 지하철노선_수정(int lineId, String name, String color) {
         Map<String, Object> params = new HashMap<>();
         params.put("name", name);
         params.put("color", color);
@@ -121,10 +135,20 @@ public class LineAcceptanceTest {
         RestAssured.given().log().all()
                 .basePath("lines")
                 .body(params)
-                .pathParam("lineId", lindId)
+                .pathParam("lineId", lineId)
                 .when().put("/{lindId}")
                 .then().log().all()
                 .assertThat().statusCode(HttpStatus.OK.value())
+                .extract();
+    }
+
+    private void 지하철노선_삭제(int lineId) {
+        RestAssured.given().log().all()
+                .basePath("lines")
+                .pathParam("lineId", lineId)
+                .when().delete("/{lindId}")
+                .then().log().all()
+                .assertThat().statusCode(HttpStatus.NO_CONTENT.value())
                 .extract();
     }
 }
