@@ -23,20 +23,7 @@ public class LineAcceptanceTest {
     @Test
     void createLineTest() {
         // When
-        Map<String, Object> params = new HashMap<>();
-        params.put("name", SILLIM_LINE);
-        params.put("color", "bg-navy-600");
-        params.put("upStationId", 1);
-        params.put("downStationId", 2);
-        params.put("distance", 10);
-
-        RestAssured.given().log().all()
-                .basePath("lines")
-                .body(params)
-                .when().post()
-                .then().log().all()
-                .assertThat().statusCode(HttpStatus.CREATED.value())
-                .extract();
+        지하철노선_생성(SILLIM_LINE, "bg-navy-600", 1, 2, 10);
 
         // Then
         ExtractableResponse<Response> response = RestAssured.given().log().all()
@@ -50,4 +37,21 @@ public class LineAcceptanceTest {
         assertThat(lineNames).contains(SILLIM_LINE);
     }
 
+
+    private void 지하철노선_생성(String name, String color, int upStationId, int downStationId, int distance) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", name);
+        params.put("color", color);
+        params.put("upStationId", upStationId);
+        params.put("downStationId", downStationId);
+        params.put("distance", distance);
+
+        RestAssured.given().log().all()
+                .basePath("lines")
+                .body(params)
+                .when().post()
+                .then().log().all()
+                .assertThat().statusCode(HttpStatus.CREATED.value())
+                .extract();
+    }
 }
