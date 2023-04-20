@@ -28,6 +28,9 @@ public class Line {
 
     private int distance;
 
+    protected Line() {
+    }
+
     public Line(String name, String color, Station upStation, Station downStation, int distance) {
         this.name = name;
         this.color = color;
