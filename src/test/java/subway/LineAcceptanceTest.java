@@ -3,10 +3,12 @@ package subway;
 import io.restassured.RestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,11 +22,27 @@ public class LineAcceptanceTest {
     private static final String SILLIM_LINE = "신림선";
     private static final String EVER_LINE = "에버라인";
 
+    private static final String NAVY_COLOR = "bg-navy-600";
+    private static final String YELLOW_COLOR = "bg-yellow-600";
+
+    private static final String SAETGANG_STATION = "샛강역";
+    private static final String GWANAKSAN_STATION = "관악산역";
+    private static final String GIHEUNG_STATION = "기흥역";
+    private static final String EVERLAND_STATION = "에버랜드역";
+
+    @BeforeEach
+    void registerStations() {
+        지하철역_생성(SAETGANG_STATION);
+        지하철역_생성(GWANAKSAN_STATION);
+        지하철역_생성(GIHEUNG_STATION);
+        지하철역_생성(EVERLAND_STATION);
+    }
+
     @DisplayName("지하철 노선을 생성한다.")
     @Test
     void createLineTest() {
         // When
-        지하철노선_생성(SILLIM_LINE, "bg-navy-600", 1, 2, 10);
+        지하철노선_생성(SILLIM_LINE, NAVY_COLOR, 1, 2, 10);
 
         // Then
         List<String> lineNames = 지하철노선_목록_조회();
@@ -35,8 +53,8 @@ public class LineAcceptanceTest {
     @Test
     void getLineListTest() {
         // Given
-        지하철노선_생성(SILLIM_LINE, "bg-navy-600", 1, 2, 10);
-        지하철노선_생성(EVER_LINE, "bg-yellow-600", 1, 3, 15);
+        지하철노선_생성(SILLIM_LINE, NAVY_COLOR, 1, 2, 10);
+        지하철노선_생성(EVER_LINE, YELLOW_COLOR, 1, 3, 15);
 
         // When
         List<String> lineNames = 지하철노선_목록_조회();
@@ -50,7 +68,7 @@ public class LineAcceptanceTest {
     @Test
     void getLineTest() {
         // Given
-        지하철노선_생성(SILLIM_LINE, "bg-navy-600", 1, 2, 10);
+        지하철노선_생성(SILLIM_LINE, NAVY_COLOR, 1, 2, 10);
 
         // When
         ExtractableResponse<Response> response = 지하철노선_조회(1);
@@ -58,7 +76,7 @@ public class LineAcceptanceTest {
         // Then
         assertThat(response.jsonPath().getInt("id")).isEqualTo(1);
         assertThat(response.jsonPath().getString("name")).isEqualTo(SILLIM_LINE);
-        assertThat(response.jsonPath().getString("color")).isEqualTo("bg-navy-600");
+        assertThat(response.jsonPath().getString("color")).isEqualTo(NAVY_COLOR);
         assertThat(response.jsonPath().getList("stations")).hasSize(2);
     }
 
@@ -66,10 +84,10 @@ public class LineAcceptanceTest {
     @Test
     void updateLineTest() {
         // Given
-        지하철노선_생성(SILLIM_LINE, "bg-navy-600", 1, 2, 10);
+        지하철노선_생성(SILLIM_LINE, NAVY_COLOR, 1, 2, 10);
 
         // When
-        지하철노선_수정(1,  EVER_LINE, "bg-navy-600");
+        지하철노선_수정(1,  EVER_LINE, NAVY_COLOR);
 
         // Then
         ExtractableResponse<Response> response = 지하철노선_조회(1);
@@ -80,7 +98,7 @@ public class LineAcceptanceTest {
     @Test
     void deleteLineTest() {
         // Given
-        지하철노선_생성(SILLIM_LINE, "bg-navy-600", 1, 2, 10);
+        지하철노선_생성(SILLIM_LINE, NAVY_COLOR, 1, 2, 10);
 
         // When
         지하철노선_삭제(1);
@@ -102,6 +120,7 @@ public class LineAcceptanceTest {
         RestAssured.given().log().all()
                 .basePath("lines")
                 .body(params)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post()
                 .then().log().all()
                 .assertThat().statusCode(HttpStatus.CREATED.value())
@@ -149,6 +168,19 @@ public class LineAcceptanceTest {
                 .when().delete("/{lindId}")
                 .then().log().all()
                 .assertThat().statusCode(HttpStatus.NO_CONTENT.value())
+                .extract();
+    }
+
+    private void 지하철역_생성(String stationName) {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", stationName);
+
+        RestAssured.given()
+                .basePath("stations")
+                .body(params)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().post()
+                .then()
                 .extract();
     }
 }
