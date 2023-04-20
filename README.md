@@ -44,7 +44,7 @@
             - [ ]  존재하지 않는 노선 삭제
 - 인수테스트 격리
 - 인수 테스트 리팩토링
-    - [ ]  base path분리
+    - [x]  base path분리
     - [x]  LineAcceptanceTest - @BeforeEach 메소드에서 Station 미리 등록하기
 
 ---

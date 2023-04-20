@@ -19,6 +19,8 @@ import static org.assertj.core.api.Assertions.*;
 @DisplayName("지하철 노선 관련 기능")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class LineAcceptanceTest {
+    private static final String basePath = "/stations";
+
     private static final String SILLIM_LINE = "신림선";
     private static final String EVER_LINE = "에버라인";
 
@@ -118,7 +120,7 @@ public class LineAcceptanceTest {
         params.put("distance", distance);
 
         RestAssured.given().log().all()
-                .basePath("lines")
+                .basePath(basePath)
                 .body(params)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .when().post()
@@ -129,7 +131,7 @@ public class LineAcceptanceTest {
 
     private List<String> 지하철노선_목록_조회() {
         return RestAssured.given().log().all()
-                .basePath("lines")
+                .basePath(basePath)
                 .when().get()
                 .then().log().all()
                 .assertThat().statusCode(HttpStatus.OK.value())
@@ -138,7 +140,7 @@ public class LineAcceptanceTest {
 
     private ExtractableResponse<Response> 지하철노선_조회(int lineId) {
         return RestAssured.given().log().all()
-                .basePath("lines")
+                .basePath(basePath)
                 .pathParam("lineId", lineId)
                 .when().get("/{lineId}")
                 .then().log().all()
@@ -152,7 +154,7 @@ public class LineAcceptanceTest {
         params.put("color", color);
 
         RestAssured.given().log().all()
-                .basePath("lines")
+                .basePath(basePath)
                 .body(params)
                 .pathParam("lineId", lineId)
                 .when().put("/{lindId}")
@@ -163,7 +165,7 @@ public class LineAcceptanceTest {
 
     private void 지하철노선_삭제(int lineId) {
         RestAssured.given().log().all()
-                .basePath("lines")
+                .basePath(basePath)
                 .pathParam("lineId", lineId)
                 .when().delete("/{lindId}")
                 .then().log().all()
