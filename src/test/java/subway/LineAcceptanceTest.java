@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.*;
 @DisplayName("지하철 노선 관련 기능")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class LineAcceptanceTest {
-    private static final String basePath = "/stations";
+    private static final String basePath = "/lines";
 
     private static final String SILLIM_LINE = "신림선";
     private static final String EVER_LINE = "에버라인";
