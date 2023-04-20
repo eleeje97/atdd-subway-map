@@ -45,6 +45,6 @@
 - 인수테스트 격리
 - 인수 테스트 리팩토링
     - [ ]  base path분리
-    - [ ]  LineAcceptanceTest - @BeforeAll 메소드에서 Station 미리 등록하기
+    - [x]  LineAcceptanceTest - @BeforeEach 메소드에서 Station 미리 등록하기
 
 ---
