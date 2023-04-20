@@ -9,7 +9,9 @@ import subway.dto.LineResponse;
 import subway.repository.LineRepository;
 import subway.repository.StationRepository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,6 +28,12 @@ public class LineService {
     public LineResponse saveLine(LineRequest lineRequest) {
         Line line = lineRepository.save(createLine(lineRequest));
         return createLineResponse(line);
+    }
+
+    public List<LineResponse> findAllLines() {
+        return lineRepository.findAll().stream()
+                .map(this::createLineResponse)
+                .collect(Collectors.toList());
     }
 
     private Line createLine(LineRequest lineRequest) {
