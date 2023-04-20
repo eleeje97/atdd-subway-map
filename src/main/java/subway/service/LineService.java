@@ -36,6 +36,12 @@ public class LineService {
                 .collect(Collectors.toList());
     }
 
+    public LineResponse findLine(Long id) {
+        return createLineResponse(
+                lineRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No such Line"))
+        );
+    }
+
     private Line createLine(LineRequest lineRequest) {
         Station upStation = findStationById(lineRequest.getUpStationId());
         Station downStation = findStationById(lineRequest.getDownStationId());
