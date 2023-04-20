@@ -1,6 +1,7 @@
 package subway.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,12 +28,16 @@ public class Line {
 
     private int distance;
 
-    public Line(String name, String color, Long upStationId, Long downStationId, int distance) {
+    public Line(String name, String color, Station upStation, Station downStation, int distance) {
         this.name = name;
         this.color = color;
-        this.upStationId = upStationId;
-        this.downStationId = downStationId;
+        this.upStationId = upStation.getId();
+        this.downStationId = downStation.getId();
         this.distance = distance;
+
+        stations = new ArrayList<>();
+        stations.add(upStation);
+        stations.add(downStation);
     }
 
     public Long getId() {
