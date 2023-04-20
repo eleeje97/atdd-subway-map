@@ -19,8 +19,10 @@ public class Line {
 
     private Long downStationId;
 
-    @OneToMany
-    @JoinColumn(name = "line_id")
+    @ManyToMany
+    @JoinTable(name = "LINE_STATION",
+            joinColumns = @JoinColumn(name = "member_id"),
+            inverseJoinColumns = @JoinColumn(name = "line_id"))
     private List<Station> stations;
 
     private int distance;
