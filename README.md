@@ -43,6 +43,8 @@
         - 예외 처리
             - [ ]  존재하지 않는 노선 삭제
 - 인수테스트 격리
+    - [x]  @DirtiesContext 사용
+    - [ ]  @Sql 사용
 - 인수 테스트 리팩토링
     - [x]  base path분리
     - [x]  LineAcceptanceTest - @BeforeEach 메소드에서 Station 미리 등록하기
