@@ -38,8 +38,15 @@ public class LineService {
 
     public LineResponse findLineById(Long id) {
         return createLineResponse(
-                lineRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No such Line"))
+                lineRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No Such Line"))
         );
+    }
+
+    @Transactional
+    public void updateLineById(Long id, LineRequest lineRequest) {
+        Line line = lineRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No Such Line"));
+        line.updateLine(lineRequest.getName(), lineRequest.getColor());
+        lineRepository.save(line);
     }
 
     private Line createLine(LineRequest lineRequest) {
@@ -61,6 +68,6 @@ public class LineService {
     }
 
     private Station findStationById(Long stationId) {
-        return stationRepository.findById(stationId).orElseThrow(() -> new NoSuchElementException("No such Station"));
+        return stationRepository.findById(stationId).orElseThrow(() -> new NoSuchElementException("No Such Station"));
     }
 }
