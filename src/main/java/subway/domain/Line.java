@@ -20,10 +20,10 @@ public class Line {
 
     private Long downStationId;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "LINE_STATION",
-            joinColumns = @JoinColumn(name = "member_id"),
-            inverseJoinColumns = @JoinColumn(name = "line_id"))
+            joinColumns = @JoinColumn(name = "line_id"),
+            inverseJoinColumns = @JoinColumn(name = "station_id"))
     private List<Station> stations;
 
     private int distance;

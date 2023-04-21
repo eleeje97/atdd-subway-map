@@ -49,6 +49,11 @@ public class LineService {
         lineRepository.save(line);
     }
 
+    @Transactional
+    public void deleteLineById(Long id) {
+        lineRepository.deleteById(id);
+    }
+
     private Line createLine(LineRequest lineRequest) {
         Station upStation = findStationById(lineRequest.getUpStationId());
         Station downStation = findStationById(lineRequest.getDownStationId());
