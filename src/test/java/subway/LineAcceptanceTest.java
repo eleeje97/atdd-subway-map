@@ -157,7 +157,8 @@ public class LineAcceptanceTest {
                 .basePath(basePath)
                 .body(params)
                 .pathParam("lineId", lineId)
-                .when().put("/{lindId}")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .when().put("/{lineId}")
                 .then().log().all()
                 .assertThat().statusCode(HttpStatus.OK.value())
                 .extract();
@@ -167,7 +168,7 @@ public class LineAcceptanceTest {
         RestAssured.given().log().all()
                 .basePath(basePath)
                 .pathParam("lineId", lineId)
-                .when().delete("/{lindId}")
+                .when().delete("/{lineId}")
                 .then().log().all()
                 .assertThat().statusCode(HttpStatus.NO_CONTENT.value())
                 .extract();
